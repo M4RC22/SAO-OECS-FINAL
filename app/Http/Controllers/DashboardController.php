@@ -471,10 +471,10 @@ class DashboardController extends Controller
 
                 /******************************************************************* 
                 * 
-                *  Org curr user belongs to counter
+                *  Registered organizations counter
                 * 
                 *****************************************************************/
-                $myOrgCount = $user->studentOrg->pluck('id')->count();
+                $orgCount = DB::table('organizations')->get()->count();
 
                 $forms = [];
                 foreach($getForms as $form){
@@ -486,7 +486,7 @@ class DashboardController extends Controller
                             'deadline' => $form->deadline,
                         ]);
                 }
-                return view('_approvers.dashboard', compact('forms','isAcadservOrFinance', 'proposalCount', 'requisitionCount', 'narrativeCount', 'liquidationCount', 'monthlyProposalCount', 'monthlyRequisitionCount', 'monthlyNarrativeCount', 'monthlyLiquidationCount', 'myOrgCount'));
+                return view('_approvers.dashboard', compact('forms','isAcadservOrFinance', 'proposalCount', 'requisitionCount', 'narrativeCount', 'liquidationCount', 'monthlyProposalCount', 'monthlyRequisitionCount', 'monthlyNarrativeCount', 'monthlyLiquidationCount', 'orgCount'));
 
             }
             return view('_users.dashboard');
