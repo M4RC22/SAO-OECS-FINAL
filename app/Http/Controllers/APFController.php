@@ -33,8 +33,8 @@ class APFController extends Controller
     // save form
     public function store(APFRequest $request)
     {
-        dd($request);
-        
+        // $validated = $request->validated();
+        // dd($validated, $request);
         $proposal = $request->safe()->except(['target_date','org_id','event_title','coorganization', 'coorganizer_name', 'coorganizer_phone', 'coorganizer_email', 'service', 'logistics_date_needed','logistics_venue', 'activity', 'start_date', 'end_date' ]);
 
         // get ID for approvers
