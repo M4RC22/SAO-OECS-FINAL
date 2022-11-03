@@ -135,7 +135,7 @@ class APFController extends Controller
     {
         $proposal = $request->safe()->except(['target_date','org_id','event_title','coorganization', 'coorganizer_name', 'coorganizer_phone', 'coorganizer_email', 'service', 'logistics_date_needed','logistics_venue', 'activity', 'start_date', 'end_date', 'coorganizers', 'requests', 'programs' ]);
 
-        $forms->update(array(
+        $forms = $forms->update(array(
             'target_date' => $request->target_date,
             'event_title' => $request->event_title,
             'organization_id' => $request->org_id,
@@ -146,7 +146,7 @@ class APFController extends Controller
 
         $proposal = $forms->proposal()->update($proposal);
 
-        // dd($proposal->logisticalNeed());
+        dd($proposal->logisticalNeed());
 
          // Logistics update
          for($i = 0; $i < count($request->service); $i++){
