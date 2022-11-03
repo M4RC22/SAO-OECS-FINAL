@@ -1,7 +1,7 @@
 @component('mail::message')
 # <p class="suc">You received a Student Organization Application.</p>
 <br>
-There's a new <b>Student Organization Application</b> that needs an approval submitted by <b>{$orgApplicant}</b>.
+There's a new <b>Student Organization Application</b> that needs an approval submitted by <b>{{$orgApplicant}}</b>.
 <br>
 
 @component('mail::panel')

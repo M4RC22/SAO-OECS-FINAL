@@ -37,7 +37,7 @@
     x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0 translate-y-6"
     x-init="setTimeout( () => alert = true, 500), setTimeout( () => alert = false, 7000)" 
-    class="fixed w-auto h-auto top-20 right-5 rounded-lg border shadow-md {{ $bg }}">
+    class="fixed w-auto h-auto top-20 right-5 z-10 rounded-lg border shadow-md {{ $bg }}">
   <div class="p-4 {{ $textColor }}">
     <div class="flex space-x-1">
         <x-svg class="mr-0" color="{{ $fill }}" marginRight="mr-0">

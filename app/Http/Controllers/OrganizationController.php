@@ -10,7 +10,11 @@ use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AddOrganizationMemberEmail;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\EditOrganizationMemberEmail;
+use App\Mail\RemoveOrganizationMemberEmail;
 
 class OrganizationController extends Controller
 {
@@ -120,10 +124,16 @@ class OrganizationController extends Controller
                 'position' => $position,
                 'role' => $request->role,
             ]);
+
+            // Email vals
+            $orgName = $user->getOrgName->org_name;
+            $role = $user->role;
+            // dd($orgName,  $position, $role);
             $message = $recruitee->first_name.' '. $recruitee->last_name.' was successfully assigned as '. $position.'!';
+            Mail::to($recruitee->email)->send(new AddOrganizationMemberEmail($orgName,  $position, $role));
+
         }
     
-        
     
 
         //Register the fetched. This will send verification email. Customize the email under resources/views/vendor
@@ -175,6 +185,13 @@ class OrganizationController extends Controller
         $selected->studentOrg()->updateExistingPivot($orgId, $attributes);
         $message = $selected->first_name.' '.$selected->last_name.' was succesfully edited!';
 
+        // Mail data
+        $orgName = $selected->studentOrg->first()->org_name;
+        $role = $request->role;
+        //  dd($orgName,  $position, $role);
+
+        Mail::to($selected->email)->send(new EditOrganizationMemberEmail($orgName,  $position, $role));
+
         return Redirect::route('organization.show', ['id'=>$orgId])->with('edit', $message);
         
         
@@ -187,7 +204,11 @@ class OrganizationController extends Controller
         $selected = User::findorfail($member);
         $selected->studentOrg()->detach($orgId);
         $message = $selected->first_name.' '.$selected->last_name.' was successfully removed from the organization.';
-        
+
+        $orgName = Organization::where('id', $orgId)->pluck('org_name')->first();
+
+        Mail::to($selected->email)->send(new RemoveOrganizationMemberEmail($orgName));
+
         return Redirect::route('organization.show', ['id'=>$orgId])->with('remove', $message);
     }
 }

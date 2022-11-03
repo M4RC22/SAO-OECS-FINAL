@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Department;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Redirect;
 use App\Helper\Helper;
+use App\Models\Department;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Mail\NewDeptHeadEmail;
+use App\Mail\RemoveDeptHeadEmail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class DepartmentHeadController extends Controller
 {
@@ -78,9 +81,12 @@ class DepartmentHeadController extends Controller
                 function($attribute, $value, $fail){
                     $response = json_decode(Http::get('https://sao-oecs-users.herokuapp.com/users'));
                     $key = array_search($value, array_column($response, 'email'));  
+                    $inUsers = User::where('email', $value)->exists();
 
-                    if($key === false){
-                        $fail("User not found. Please use valid APC Email!");
+                    if($inUsers === false){
+                        if($key === false){
+                            $fail("User not found. Please use valid APC Email!");
+                        }
                     }
                 }],
             ]
@@ -121,6 +127,10 @@ class DepartmentHeadController extends Controller
         
         //dettach current department head from department.
         $currentHead = User::findOrFail($userId);
+        $currHeadEmail = $currentHead->email;
+        $newHeadEmail = $user->email;
+        $dept = Department::where('id', $departmentId)->pluck('name')->first();
+        // dd($currHeadEmail, $newHeadEmail, $dept);
         $currentHead->userStaff()->delete($departmentId); 
 
         //attach new department head
@@ -133,7 +143,13 @@ class DepartmentHeadController extends Controller
 
         ]);
 
+        Mail::to($currHeadEmail)->send(new RemoveDeptHeadEmail($dept));
+        Mail::to($newHeadEmail)->send(new NewDeptHeadEmail($dept));
+
+
+
         return Redirect::route('department-heads.index')->with('add', 'New Department Head was assigned successfully!');
+        dd('tes');
     }
 
 }

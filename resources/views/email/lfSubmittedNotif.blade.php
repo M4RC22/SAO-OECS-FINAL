@@ -10,7 +10,7 @@ Kindly wait for its approval.
 To view your <b>Liquidation Form</b> status, please click the button below:
 @endcomponent
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/home'])
+@component('mail::button', ['url' => URL::route('dashboard')])
 View Status
 @endcomponent
 

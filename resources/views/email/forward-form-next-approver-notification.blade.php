@@ -1,14 +1,18 @@
 @component('mail::message')
-# <p class="suc">The <b>{formType} Form</b> was forwarded to the <b>{nextApprover}</b>.</p>
+# <p class="suc">The <b>{{$formType}}</b> was forwarded to the <b>{{$nextApprover}}.</p>
+<br>
+The form will be reviewed by <b>{{$nextApprover}}</b> 
 
 @component('mail::panel')
-Please wait for <b>1-3 days</b> for approval.
+Event: {{$formTitle}}
+<br>
+Please wait for 1-3 days for approval.
 <br>
 <br>
-To view your <b>{formType} Form</b> status, please click the button below:
+To view the status of your <b>{{$formType}}</b>, please click the button below:
 @endcomponent
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/submittedForms'])
+@component('mail::button', ['url' => URL::route('dashboard')])
 View Status
 @endcomponent
 

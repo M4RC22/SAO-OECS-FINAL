@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use App\Mail\nrSubmittedEmail;
+use App\Mail\FormApproverEmail;
 use App\Http\Requests\NRRequest;
 use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class NRController extends Controller
 {
@@ -32,7 +35,6 @@ class NRController extends Controller
 
     public function store(NRRequest $request)
     {
-        dd($request);
         $nr = $request->safe()->only(['venue', 'narration', 'ratings' ]);
         $event = Form::where('event_id', $request->event_id)->get()->first();
 
@@ -127,8 +129,17 @@ class NRController extends Controller
                    'type' => 'suggestion'
             ]);
         }
+        
+        $formType = 'Narrative Report';
+        $adviserEmail = $orgAdviser->fromUser->email;
 
-        return redirect('dashboard')->with('add-nr', 'Narrative Report was successfully created!');
+        $currEmail = auth()->user()->email;
+        $formTitle = $form->event_title;
+
+        Mail::to($currEmail)->send(new nrSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+
+        return redirect('dashboard')->with('add-nr', 'Updated successfully! Submitted to approver.');
 
         
 
@@ -140,12 +151,16 @@ class NRController extends Controller
         $nr = $request->safe()->only(['venue', 'remarks', 'ratings' ]);
 
         $forms->update(array(
+            'status' => 'Pending',
+            'remarks' => '',
             'event_id' => $request->event_id,
             'status' => 'Pending'
         )); 
 
         // Narrative Update
-        $narrative = $forms->narrative()->update($nr);
+        $forms->narrative()->update($nr);
+
+        $narrative = $forms->narrative()->first();
 
            // Narrative Poster UPDATE
            $imagePath = $request->file('official_poster')->store('uploads/posters', 'public');
@@ -197,6 +212,16 @@ class NRController extends Controller
                ]);
            }
 
+        
+           
+        $formType = 'Narrative Report';
+        $adviserEmail = $forms->getFormAdviser->fromUser->email;
+        $currEmail = auth()->user()->email;
+        $formTitle = $forms->event_title;
+
+        Mail::to($currEmail)->send(new nrSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+        
         return back()->with('add', 'Updated successfully!');
     }
 

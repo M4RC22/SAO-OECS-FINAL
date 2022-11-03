@@ -300,7 +300,7 @@ class UserSeeder extends Seeder
                 'phone_number' => '09456643543',
                 'user_type' => 'Professor',
                 'email' => 'codeseekers@apc.edu.ph',
-                'password' => bcrypt('xt!@n_p061')
+                'password' => bcrypt('xT1@n_p06!')
             ],
             //27 - Codeseekers President
             [
@@ -310,7 +310,7 @@ class UserSeeder extends Seeder
                 'phone_number' => '09363378264',
                 'user_type' => 'Student',
                 'email' => 'cbpili@student.apc.edu.ph',
-                'password' => bcrypt('xt!@n_p061')
+                'password' => bcrypt('xT1@n_p06!')
             ],
 
         ];

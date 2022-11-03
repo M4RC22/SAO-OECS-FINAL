@@ -7,21 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ForwardFormNextApproverEmail extends Mailable
+class FormApproverEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $formType;
-    public $nextApprover;
     public $formTitle;
 
-    public function __construct($formType, $nextApprover, $formTitle)
+    public function __construct($formType, $formTitle)
     {
         $this->formType = $formType;
-        $this->nextApprover = $nextApprover;
         $this->formTitle = $formTitle;
-
-
+        
     }
 
     /**
@@ -31,7 +28,7 @@ class ForwardFormNextApproverEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.forward-form-next-approver-notification')
-                    ->subject('Forms Approval Pending');
+        return $this->markdown('email.form-approver-notification')
+        ->subject('Form ready to be reviewed');
     }
 }

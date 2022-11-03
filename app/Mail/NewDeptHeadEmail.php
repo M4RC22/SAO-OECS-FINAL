@@ -11,14 +11,11 @@ class NewDeptHeadEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $dept;
+
+    public function __construct($dept)
     {
-        //
+        $this->dept = $dept;
     }
 
     /**

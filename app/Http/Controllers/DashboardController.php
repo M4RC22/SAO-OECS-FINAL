@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\User;
 use App\Models\Event;
-use App\Models\Department;
 use App\Helper\Helper;
+use App\Models\Department;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -471,10 +472,10 @@ class DashboardController extends Controller
 
                 /******************************************************************* 
                 * 
-                *  Org curr user belongs to counter
+                *  Registered organizations counter
                 * 
                 *****************************************************************/
-                $myOrgCount = $user->studentOrg->pluck('id')->count();
+                $orgCount = DB::table('organizations')->get()->count();
 
                 $forms = [];
                 foreach($getForms as $form){
@@ -486,7 +487,7 @@ class DashboardController extends Controller
                             'deadline' => $form->deadline,
                         ]);
                 }
-                return view('_approvers.dashboard', compact('forms','isAcadservOrFinance', 'proposalCount', 'requisitionCount', 'narrativeCount', 'liquidationCount', 'monthlyProposalCount', 'monthlyRequisitionCount', 'monthlyNarrativeCount', 'monthlyLiquidationCount', 'myOrgCount'));
+                return view('_approvers.dashboard', compact('forms','isAcadservOrFinance', 'proposalCount', 'requisitionCount', 'narrativeCount', 'liquidationCount', 'monthlyProposalCount', 'monthlyRequisitionCount', 'monthlyNarrativeCount', 'monthlyLiquidationCount', 'orgCount'));
 
             }
             return view('_users.dashboard');
@@ -540,6 +541,13 @@ class DashboardController extends Controller
             $externalCoorganizers = $proposal->externalCoorganizer;
             $logisticalNeeds =  $proposal->logisticalNeed;
             $preprograms = $proposal->preprograms;
+
+            $authId = auth()->user()->id;
+
+            $authOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
+                $query->where('user_id', $authId);
+                $query->whereIn('role', ['Moderator', 'Editor']);
+            })->get();
     
             return view('_student-organization.edit-forms.activity-proposal', compact('forms','message', 'authOrgList', 'proposal', 'externalCoorganizers', 'logisticalNeeds', 'preprograms' ));
     
@@ -569,7 +577,7 @@ class DashboardController extends Controller
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
-                $query->where('status','Pending');
+                $query->where('status','Approved');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
             $departments = Department::orderBy('name')->get();
 
@@ -584,7 +592,7 @@ class DashboardController extends Controller
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
-                $query->where('status','Pending');
+                $query->where('status','Approved');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
             $departments = Department::orderBy('name')->get();
 

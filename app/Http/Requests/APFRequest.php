@@ -33,6 +33,7 @@ class APFRequest extends FormRequest
             'organizer_name' => 'required',
             'act_classification' => 'required|max:2',
             'act_location' => 'required|max:20',
+                // 'NewCoorganizers[*].coorganization' => 'required',
                 'coorganization.*' => 'required',
                 'coorganizer_name.*' => 'required',
                 'coorganizer_phone.*' => 'required',
