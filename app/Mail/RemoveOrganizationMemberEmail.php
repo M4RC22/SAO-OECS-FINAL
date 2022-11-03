@@ -11,14 +11,12 @@ class RemoveOrganizationMemberEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $orgName;
+
+    public function __construct($orgName)
     {
-        //
+        $this->orgName = $orgName;
+        
     }
 
     /**

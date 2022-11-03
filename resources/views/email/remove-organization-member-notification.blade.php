@@ -2,7 +2,7 @@
 # <p class="deny">We're sorry to say!</p>
 
 @component('mail::panel')
-You have been removed from <b>{orgName[0]}</b>.
+You have been removed from <b>{{$orgName}}</b>.
 @endcomponent
 
 Thanks,<br>

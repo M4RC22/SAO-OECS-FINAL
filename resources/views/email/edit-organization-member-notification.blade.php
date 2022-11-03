@@ -1,20 +1,20 @@
 @component('mail::message')
 # <p class="suc">Permission changed!</p>
 <br>
-Your privilege to <b>{orgName[0]}</b> have been changed.
+Your privilege to <b>{{$orgName}}</b> have been changed.
 <br>
 
 @component('mail::panel')
-Position: <b>{emailData['position']}</b>
+Position: <b>{{$position}}</b>
 <br>
-Role: <b>{emailData['role']}</b>
+Role: <b>{{$role}}</b>
 <br>
 <br>
 <br>
 To view your student organization, kindly click the button below:
 @endcomponent
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/roles'])
+@component('mail::button', ['url' => URL::route('organization.index')])
 View Organization
 @endcomponent
 

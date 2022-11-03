@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use App\Mail\FormApproverEmail;
 use App\Http\Requests\LFRequest;
 use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class LFController extends Controller
 {
@@ -94,7 +96,16 @@ class LFController extends Controller
                 ]);
         }
 
-       
+
+        $formType = 'Liquidation Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $form->event_title;
+
+        Mail::to($currEmail)->send(new lfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+
         return redirect('dashboard')->with('add', 'Liquidation Form created successfully!');
        
     }
@@ -134,6 +145,16 @@ class LFController extends Controller
                     'price' => $request->price[$i],
                 ]);
         }
+
+        $formType = 'Liquidation Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $forms->event_title;
+
+        Mail::to($currEmail)->send(new lfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+
         return back()->with('add', 'Updated successfully!');
     }
 

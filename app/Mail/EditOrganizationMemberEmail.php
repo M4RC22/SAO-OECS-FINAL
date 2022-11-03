@@ -11,14 +11,18 @@ class EditOrganizationMemberEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    
+    public $orgName;
+    public $position;
+    public $role;
+
+
+    public function __construct($orgName,  $position, $role)
     {
-        //
+        $this->orgName = $orgName;
+        $this->position = $position;
+        $this->role = $role;
+
     }
 
     /**

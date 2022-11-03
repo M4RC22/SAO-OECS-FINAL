@@ -6,21 +6,28 @@ use App\Models\Form;
 use App\Models\Staff;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Mail\rfSubmittedEmail;
+use App\Mail\FormApproverEmail;
 use App\Http\Requests\RFRequest;
 use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class RFController extends Controller
 {
     public function index()
     {
-        // Fetch Pending events (via APF) that exists in orgs curr user belongs 
+                
+                // Fetch Pending events (via APF) that exists in orgs curr user belongs 
         $eventList = Form::where('form_type', '=', 'APF')
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
                 $query->where('status','Pending');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
+
+
+            // dd($eventList->fromOrgUser->whereIn('role', ['Editor', 'Moderator']));
         $departments = Department::orderBy('name')->get();
 
         return view('_student-organization.forms.budget-requisition', compact('eventList', 'departments'))
@@ -82,6 +89,16 @@ class RFController extends Controller
                     'price' => $request->price[$i],
                 ]);
         }
+
+        $formType = 'Budget Requisition Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $form->event_title;
+
+        Mail::to($currEmail)->send(new rfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+
         return redirect('dashboard')->with('add-rf', 'Budget Requisition Form was successfully created!');
     }
 
@@ -106,6 +123,15 @@ class RFController extends Controller
                     'price' => $request->price[$i],
                 ]);
         }
+
+        $formType = 'Budget Requisition Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $forms->event_title;
+
+        Mail::to($currEmail)->send(new rfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
         return back()->with('add', 'Updated successfully!');
 

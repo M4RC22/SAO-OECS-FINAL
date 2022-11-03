@@ -7,12 +7,17 @@ use App\Models\Form;
 use App\Models\Staff;
 use App\Helper\Helper;
 use App\Models\Proposal;
+use App\Models\Narrative;
+use App\Mail\FormDenyEmail;
+use App\Mail\FormDoneEmail;
 use App\Models\Liquidation;
 use App\Models\Requisition;
-use App\Models\Narrative;
 use Illuminate\Http\Request;
+use App\Mail\FormApproverEmail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\ForwardFormNextApproverEmail;
 
 class SubmittedFormsController extends Controller
 {
@@ -288,24 +293,37 @@ class SubmittedFormsController extends Controller
         $no = 0;
         $done = 'Done';
         $approved = 'Approved';
+        $formType = $forms->form_type;
+        $currEmail = $user->email;
+        $preparedByEmail = $forms->fromOrgUser->fromUser->email;
+        $nextApprover = '';
+        $formTitle = $forms->event_title;
+        // dd($preparedByEmail);
 
-        // For Narrative = (1 -> 2)
-        if($forms->form_type == 'NR' ){
 
-            if($isAdviser){
+       
+        /********************************************************************************
+        *  
+        *    For Narrative = (1 -> 2)
+        *
+        *********************************************************************************/
+        if(($formType == 'NR') && $isAdviser && $forms->adviser_is_approve === 0 ){
 
-                if($forms->adviser_is_approve === 0 ){
                     $forms->update(array(
                         'adviser_is_approve' => $yes,
                         'adviser_date_approved' => $now,
                         'deadline' => $deadline,
                         'curr_approver' => $sao
                     ));
-                }
-            }
 
-            if($isSaoHead){
-                if($forms->sao_is_approve === 0 ){
+            $nextApprover = 'SAO';
+
+
+        }
+
+        if(($formType == 'NR') && $isSaoHead && $forms->sao_is_approve === 0 ){
+
+
                     $forms->update(array(
                         'sao_is_approve' => $yes,
                         'sao_date_approved' => $now,
@@ -314,15 +332,19 @@ class SubmittedFormsController extends Controller
                         'status' => $approved
 
                     ));
-                }
-            }
+
+            $nextApprover = 'Done';
         }
 
-        // For Liquidation (1 -> 4)
-        if($forms->form_type == 'LF' ){
+        /*********************************************************************************
+        *  
+        *    For Liquidation (1 -> 4)
+        *
+        *********************************************************************************/
 
-            if($isAdviser){
-                if($forms->adviser_is_approve === 0 ){
+        if(($formType == 'LF') && $isAdviser && $forms->adviser_is_approve === 0 ){
+
+
                     $forms->update(array(
                         'adviser_is_approve' => $yes,
                         'acadserv_is_approve' => $yes,
@@ -330,11 +352,15 @@ class SubmittedFormsController extends Controller
                         'deadline' => $deadline,
                         'curr_approver' => $finance
                     ));
-                }
-            }
 
-            if($isFinanceHead){
-                if($forms->finance_is_approve === 0 ){
+            $nextApprover = 'Finance';
+            
+        }
+
+
+        if(($formType == 'LF') && $isFinanceHead && $forms->finance_is_approve === 0 ){
+        
+
                     $forms->update(array(
                         'finance_is_approve' => $yes,
                         'finance_date_approved' => $now,
@@ -342,48 +368,62 @@ class SubmittedFormsController extends Controller
                         'curr_approver' => $done,
                         'status' => $approved
                     ));
-                }
-            }
+
+            $nextApprover = 'Done';
+            
         }
 
-         // For APF and BRF (1 -> 2 -> 3 -> 4)
-         if($forms->form_type == 'APF' || 'BRF' ){
 
-            if($isAdviser){
-                if($forms->adviser_is_approve === 0 ){
+        /*********************************************************************************
+        *  
+        *    For APF and BRF (1 -> 2 -> 3 -> 4)
+        *
+        *********************************************************************************/
+
+        if(($formType == 'APF' || 'BRF') && $isAdviser && $forms->adviser_is_approve === 0 ){
+
+
                     $forms->update(array(
                         'adviser_is_approve' => $yes,
                         'adviser_date_approved' => $now,
                         'deadline' => $deadline,
                         'curr_approver' => $sao
                     ));
-                }
-            }
 
-            if($isSaoHead){
-                if($forms->sao_is_approve === 0 ){
+            
+            $nextApprover = 'SAO';
+            
+
+        }
+
+        if(($formType == 'APF' || 'BRF') && $isSaoHead && $forms->sao_is_approve === 0 ){
+
                     $forms->update(array(
                         'sao_is_approve' => $yes,
                         'sao_date_approved' => $now,
                         'deadline' => $deadline,
                         'curr_approver' => $acadserv,
                     ));
-                }
-            }
 
-            if($isAcadServHead){
-                if($forms->acadserv_is_approve === 0 ){
+            $nextApprover = 'Academic Services';
+                
+        }
+
+        if(($formType == 'APF' || 'BRF') && $isAcadServHead && $forms->acadserv_is_approve === 0 ){
+
                     $forms->update(array(
                         'acadserv_is_approve' => $yes,
                         'acadserv_date_approved' => $now,
                         'deadline' => $deadline,
                         'curr_approver' => $finance,
                     ));
-                }
-            }
 
-            if($isFinanceHead){
-                if($forms->finance_is_approve === 0 ){
+            $nextApprover = 'Finance';
+            
+        }
+
+        if(($formType == 'APF' || 'BRF') && $isFinanceHead && $forms->finance_is_approve === 0 ){
+            
                     $forms->update(array(
                         'finance_is_approve' => $yes,
                         'finance_date_approved' => $now,
@@ -391,10 +431,29 @@ class SubmittedFormsController extends Controller
                         'curr_approver' => $done,
                         'status' => $approved
                     ));
-                }
-            }
+
+            $nextApprover = 'Done';
+            
         }
 
+        if($formType === 'APF'){
+            $formType = 'Activity Proposal Form';
+        }elseif($formType === 'BRF'){
+            $formType = 'Budget Requisition Form';
+        }elseif($formType === 'NR'){
+            $formType = 'Narrative Report';
+        }elseif($formType === 'LF'){
+            $formType = 'Liquidation Form';
+        }
+
+        // dd($formType, $currEmail, $nextApprover);
+
+        if($nextApprover === 'Done'){
+            Mail::to($preparedByEmail)->send(new FormDoneEmail($formType));
+        }else{
+            Mail::to($preparedByEmail)->send(new ForwardFormNextApproverEmail($formType, $nextApprover, $formTitle));
+            Mail::to($currEmail)->send(new FormApproverEmail($formType, $formTitle));
+        }
         $message = $forms->event_title.' was approved!';
 
         return Redirect::route('submitted-forms.index')->with('add', $message);
@@ -412,6 +471,23 @@ class SubmittedFormsController extends Controller
         $forms->update(array('status' => 'Denied', 'remarks' => $request->remarks));
 
         $message = $forms->event_title.' was denied!';
+
+        $formType = $forms->form_type;
+        $formTitle = $forms->event_title;
+        $preparedByEmail = $forms->fromOrgUser->fromUser->email;
+        $formRemarks = $forms->remarks;
+
+        if($formType === 'APF'){
+            $formType = 'Activity Proposal Form';
+        }elseif($formType === 'BRF'){
+            $formType = 'Budget Requisition Form';
+        }elseif($formType === 'NR'){
+            $formType = 'Narrative Report';
+        }elseif($formType === 'LF'){
+            $formType = 'Liquidation Form';
+        }
+
+        Mail::to($preparedByEmail)->send(new FormDenyEmail($formType, $formTitle, $formRemarks));
 
         return Redirect::route('submitted-forms.index')->with('remove', $message);
     }

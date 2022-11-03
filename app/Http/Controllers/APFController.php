@@ -10,21 +10,30 @@ use App\Models\Staff;
 use App\Models\Proposal;
 use App\Models\PrePrograms;
 use Illuminate\Support\Arr;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Models\LogisticalNeed;
+use App\Mail\apfSubmittedEmail;
+use App\Mail\FormApproverEmail;
 use App\Models\OrganizationUser;
 use App\Http\Requests\APFRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExternalCoorganizer;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class APFController extends Controller
 {
     // display form
     public function index()
     {
+        $authId = auth()->user()->id;
 
-        $authOrgList = Auth::user()->studentOrg;
+        $authOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
+            $query->where('user_id', $authId);
+            $query->whereIn('role', ['Moderator', 'Editor']);
+        })->get();
+
 
         return view('_student-organization.forms.activity-proposal', compact('authOrgList'))
         ->with("message", "Hello APF!");
@@ -39,7 +48,8 @@ class APFController extends Controller
 
         // get ID for approvers
         $orgAdviser = OrganizationUser::where('organization_id',$request->org_id)
-            ->where('position', 'Adviser')->pluck('id')->first();
+            ->where('position', 'Adviser')->first();
+         
 
         //Check first if student organization have an adviser before continuing the process, else return error. 
         if($orgAdviser === null){
@@ -64,7 +74,7 @@ class APFController extends Controller
             'organization_id' => $request->org_id,
             'prep_by' => Auth::user()->id,
             'control_number'=> $this->generateUniqueCode(),
-            'organization_user_adviser_id' => $orgAdviser,
+            'organization_user_adviser_id' => $orgAdviser->id,
             'sao_staff_id' => $sao,
             'acadserv_staff_id' => $acadserv,
             'finance_staff_id' => $finance,
@@ -106,6 +116,16 @@ class APFController extends Controller
                     'end_date_time' => $request->end_date[$i],
                 ]);
         }
+
+        $formType = 'Activity Proposal Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $form->event_title;
+
+        Mail::to($currEmail)->send(new apfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
+
         return redirect('dashboard')->with('add-apf', 'Activity Proposal Form was successfully created!');
     }
 
@@ -155,6 +175,15 @@ class APFController extends Controller
                     'end_date_time' => $request->end_date[$i],
                 ]);
         }
+
+        $formType = 'Activity Proposal Form';
+        $adviserEmail = $orgAdviser->fromUser->email;
+
+        $currEmail = auth()->user()->email;
+        $formTitle = $forms->event_title;
+
+        Mail::to($currEmail)->send(new apfSubmittedEmail());
+        Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
          
         return redirect()->route('dashboard')->with('add', 'Updated successfully!');
