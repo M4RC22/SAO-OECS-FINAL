@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\Staff;
 use App\Models\Department;
@@ -36,7 +37,7 @@ class RFController extends Controller
 
     public function store(RFRequest $request)
     {
-        dd($request);
+        // dd($request);
         $rf = $request->safe()->except(['event_id','quantity','purpose','price']);
         $event = Form::where('event_id', $request->event_id)->get()->first();
 
@@ -105,15 +106,19 @@ class RFController extends Controller
    
     public function update(RFRequest $request, Form $forms)
     {
-        $rf = $request->safe()->except(['event_id','quantity','purpose','price']);
+        $rf = $request->safe()->except(['event_id','quantity','purpose','price', 'items']);
 
         $forms->update(array(
+            'status' => 'Pending',
+            'remarks' => '',
             'event_id' => $request->event_id,
             'status' => 'Pending'
         )); 
 
         // Requisition update
-        $requisition = $forms->requisition()->update($rf);
+        $forms->requisition()->update($rf);
+
+        $requisition = $forms->requisition()->first();
 
         // Req_Items update
         for($i = 0; $i < count($request->quantity); $i++){
@@ -125,15 +130,15 @@ class RFController extends Controller
         }
 
         $formType = 'Budget Requisition Form';
-        $adviserEmail = $orgAdviser->fromUser->email;
-
+        $adviserEmail = $forms->getFormAdviser->fromUser->email;
         $currEmail = auth()->user()->email;
         $formTitle = $forms->event_title;
+
 
         Mail::to($currEmail)->send(new rfSubmittedEmail());
         Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
-        return back()->with('add', 'Updated successfully!');
+        return redirect()->route('dashboard')->with('add', 'Updated successfully! Submitted to approver.');
 
         
     }

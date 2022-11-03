@@ -1,7 +1,7 @@
 @component('mail::message')
 # <p class="suc">Congratulations!</p>
 <br>
-Your <b>Student Organization Application</b> has been approved.
+Your Student Organization Application for <b>{{$orgName}}</b> has been approved.
 <br>
 
 @component('mail::panel')

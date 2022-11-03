@@ -135,18 +135,19 @@ class APFController extends Controller
     {
         $proposal = $request->safe()->except(['target_date','org_id','event_title','coorganization', 'coorganizer_name', 'coorganizer_phone', 'coorganizer_email', 'service', 'logistics_date_needed','logistics_venue', 'activity', 'start_date', 'end_date', 'coorganizers', 'requests', 'programs' ]);
 
-        $forms = $forms->update(array(
+        $forms->update(array(
             'target_date' => $request->target_date,
             'event_title' => $request->event_title,
             'organization_id' => $request->org_id,
-            'status' => 'Pending'
+            'status' => 'Pending',
+            'remarks' => ''
         )); 
 
 
 
-        $proposal = $forms->proposal()->update($proposal);
+        $forms->proposal()->update($proposal);
 
-        dd($proposal->logisticalNeed());
+        $proposal = $forms->proposal()->first();
 
          // Logistics update
          for($i = 0; $i < count($request->service); $i++){
@@ -176,9 +177,10 @@ class APFController extends Controller
                 ]);
         }
 
+        
+        
         $formType = 'Activity Proposal Form';
-        $adviserEmail = $orgAdviser->fromUser->email;
-
+        $adviserEmail = $forms->getFormAdviser->fromUser->email;
         $currEmail = auth()->user()->email;
         $formTitle = $forms->event_title;
 
@@ -186,7 +188,7 @@ class APFController extends Controller
         Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
          
-        return redirect()->route('dashboard')->with('add', 'Updated successfully!');
+        return redirect()->route('dashboard')->with('add', 'Updated successfully! Submitted to approver.');
     }
 
     // delete form

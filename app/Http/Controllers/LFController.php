@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use App\Mail\lfSubmittedEmail;
 use App\Mail\FormApproverEmail;
 use App\Http\Requests\LFRequest;
 use App\Models\OrganizationUser;
@@ -30,8 +31,6 @@ class LFController extends Controller
 
     public function store(LFRequest $request)
     {   
-        dd($request);
-        
         $lf = $request->safe()->only(['end_date','cash_advance','deduct']);
         $event = Form::where('event_id', $request->event_id)->get()->first();
 
@@ -112,24 +111,27 @@ class LFController extends Controller
 
     public function update(LFRequest $request, Form $forms)
     {
-        dd($request);
         
         $lf = $request->safe()->only(['end_date','cash_advance','deduct']);
 
         $forms->update(array(
+            'status' => 'Pending',
+            'remarks' => '',
             'event_id' => $request->event_id,
             'status' => 'Pending'
         )); 
 
         // Liquidation Create
-        $liquidation = $forms->requisition()->update($lf);
+        $forms->liquidation()->update($lf);
+
+        $liquidation = $forms->liquidation()->first();
 
        // Proof of Payments update
        for($i = 0; $i < count($request->itemFrom); $i++){
         //store image in storage before inserting to databse.
         $imagePath = $request->image[$i]->store('uploads/receipts', 'public');
         
-        $liquidation->proofOfPayment()-update([
+        $liquidation->proofOfPayment()->update([
             'item_from' => $request->itemFrom[$i],
             'item_to' => $request->itemTo[$i],
             'image' => $imagePath,
@@ -147,15 +149,16 @@ class LFController extends Controller
         }
 
         $formType = 'Liquidation Form';
-        $adviserEmail = $orgAdviser->fromUser->email;
-
+        $adviserEmail = $forms->getFormAdviser->fromUser->email;
         $currEmail = auth()->user()->email;
         $formTitle = $forms->event_title;
+
 
         Mail::to($currEmail)->send(new lfSubmittedEmail());
         Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
-        return back()->with('add', 'Updated successfully!');
+        return redirect()->route('dashboard')->with('add', 'Updated successfully! Submitted to approver.');
+
     }
 
     /**

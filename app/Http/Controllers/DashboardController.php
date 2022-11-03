@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Form;
 use App\Models\User;
 use App\Models\Event;
-use App\Models\Department;
 use App\Helper\Helper;
+use App\Models\Department;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Models\OrganizationUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -540,6 +541,13 @@ class DashboardController extends Controller
             $externalCoorganizers = $proposal->externalCoorganizer;
             $logisticalNeeds =  $proposal->logisticalNeed;
             $preprograms = $proposal->preprograms;
+
+            $authId = auth()->user()->id;
+
+            $authOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
+                $query->where('user_id', $authId);
+                $query->whereIn('role', ['Moderator', 'Editor']);
+            })->get();
     
             return view('_student-organization.edit-forms.activity-proposal', compact('forms','message', 'authOrgList', 'proposal', 'externalCoorganizers', 'logisticalNeeds', 'preprograms' ));
     
@@ -569,7 +577,7 @@ class DashboardController extends Controller
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
-                $query->where('status','Pending');
+                $query->where('status','Approved');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
             $departments = Department::orderBy('name')->get();
 
@@ -584,7 +592,7 @@ class DashboardController extends Controller
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
-                $query->where('status','Pending');
+                $query->where('status','Approved');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
             $departments = Department::orderBy('name')->get();
 

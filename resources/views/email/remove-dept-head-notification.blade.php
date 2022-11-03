@@ -3,7 +3,7 @@
 <br>
 
 @component('mail::panel')
-Your position as <b>Department Head of {$dept}</b> has been removed.
+Your position as <b>Department Head of {{$dept}}</b> has been removed.
 @endcomponent
 
 

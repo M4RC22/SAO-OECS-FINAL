@@ -11,14 +11,11 @@ class OrgApplicationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $orgApplicant;
+
+    public function __construct($orgApplicant)
     {
-        //
+       $this->orgApplicant = $orgApplicant;
     }
 
     /**
