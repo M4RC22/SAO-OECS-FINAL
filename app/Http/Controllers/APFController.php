@@ -169,8 +169,8 @@ class APFController extends Controller
             $proposal->externalCoorganizer()->update([
                     'coorganization' => $request->coorganization[$i],
                     'coorganizer' => $request->coorganizer_name[$i],
-                    'email' => $request->coorganizer_phone[$i],
-                    'phone_number' => $request->coorganizer_email[$i],
+                    'email' => $request->coorganizer_email[$i],
+                    'phone_number' => $request->coorganizer_phone[$i],
                 ]);
         }
 

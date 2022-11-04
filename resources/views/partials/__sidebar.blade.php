@@ -20,7 +20,7 @@
         <div x-cloak x-data="{ dropdown: $persist(false).using(sessionStorage) }">
 
             {{-- Dashboard --}}
-            <x-sidebar-nav-link :href="route('dashboard')" :active="Helper::checkRoute('dashboard') || (Helper::checkRoute('submitted-forms.show') && Auth::user()->checkUserType('Student'))" @click="dropdown = false">
+            <x-sidebar-nav-link :href="route('dashboard')" :active="Helper::checkRoute('dashboard') || ((Helper::checkRoute('submitted-forms.show') || (Helper::checkRoute('forms.edit.show') )) && Auth::user()->checkUserType('Student'))" @click="dropdown = false">
                 <x-slot name="icon">
                     <x-svg>
                         <path d="M4 21V9l8-6 8 6v12h-6v-7h-4v7Zm2-2h2v-7h8v7h2v-9l-6-4.5L6 10Zm6-6.75Z"/>

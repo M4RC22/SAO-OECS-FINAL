@@ -157,26 +157,11 @@ Route::group(['middleware' => ['auth', 'isSaoHead']], function(){
 
 
 
-
-
-
-
-
-
-//Below Are Test Route only
-Route::post('/test', function(Request $request){
-    dd($request);
-})->name('test');
-
-Route::get('/test-details', function(){
-    return view('_approvers.view-details.liquidation');
-})->name('test-details');
-
-Route::get('/test-edit', function(){
-    return view('_student-organization.edit-forms.activity-proposal');
-});
-
-//Email
+/*
+|--------------------------------------------------------------------------
+| Emails
+|--------------------------------------------------------------------------
+*/
 
 //Submitted Forms
 Route::get('/apf', function (){
