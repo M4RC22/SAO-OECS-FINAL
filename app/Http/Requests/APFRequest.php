@@ -30,7 +30,7 @@ class APFRequest extends FormRequest
             'venue' => 'required|max:60',
             'event_title' => 'required|max:45',
             'org_id' => 'required',
-            'organizer_name' => 'required',
+            'organizer_organization_user_id' => 'required',
             'act_classification' => 'required|max:2',
             'act_location' => 'required|max:20',
                 // 'NewCoorganizers[*].coorganization' => 'required',

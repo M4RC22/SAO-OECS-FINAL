@@ -24,9 +24,16 @@ class OrganizationUser extends Pivot
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+
     // HAS
     public function toForm(){
         return $this->hasMany(Form::class, 'prep_by', 'user_id');
+    }
+
+
+    public function toProposal(){
+        return $this->hasMany(Proposal::class, 'organizer_organization_user_id');
     }
 
 

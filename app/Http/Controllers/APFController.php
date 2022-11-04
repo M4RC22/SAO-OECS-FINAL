@@ -27,15 +27,20 @@ class APFController extends Controller
     // display form
     public function index()
     {
-        $authId = auth()->user()->id;
+        $auth = auth()->user();
+        $authId = $auth->id;
 
         $authOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
             $query->where('user_id', $authId);
             $query->whereIn('role', ['Moderator', 'Editor']);
         })->get();
 
+        $orgArray = $authOrgList->pluck('id')->toArray();
+        
+        // Shows all members of the $chosenOrg
+        $organizerList = OrganizationUser::whereIn('organization_id', $orgArray)->get();
 
-        return view('_student-organization.forms.activity-proposal', compact('authOrgList'))
+        return view('_student-organization.forms.activity-proposal', compact('authOrgList', 'organizerList'))
         ->with("message", "Hello APF!");
     }
 
@@ -127,6 +132,7 @@ class APFController extends Controller
         Mail::to($adviserEmail)->send(new FormApproverEmail($formType, $formTitle));
 
         return redirect('dashboard')->with('add-apf', 'Activity Proposal Form was successfully created!');
+       
     }
 
     

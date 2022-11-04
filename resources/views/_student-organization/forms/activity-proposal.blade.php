@@ -110,10 +110,14 @@
 
                         {{-- Name of organizer --}}
                         <div>
-                            <x-label for="organizer_name" :value="__('Name of Organizer')" />
-                            
-                            <x-input id="organizer_name" class="mt-1 w-full" type="text" name="organizer_name" required autofocus @keyup="storeInput($el)"/>
-                            @error('organizer_name')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
+                            <x-label for="organizer_organization_user_id" :value="__('Name of Organizer')" />
+                            <x-select class="mt-1" id="organizer_organization_user_id" name="organizer_organization_user_id" aria-label="Default select example" required @change="storeInput($el)">
+                                <option value='' disabled selected>--select option--</option>
+                                @foreach($organizerList as $organizer)
+                                <option value="{{$organizer->id}}">{{$organizer->fromUser->first_name}} {{$organizer->fromUser->last_name}}</option>
+                                @endforeach
+                            </x-select>
+                            @error('organizer_organization_user_id')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
                         </div>
 
                     </div>

@@ -12,12 +12,11 @@ class FormDoneEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $formType;
-    public $nextApprover;
 
-    public function __construct($formType, $nextApprover)
+    public function __construct($formType)
     {
         $this->formType = $formType;
-        $this->nextApprover = $nextApprover;
+
     }
 
     /**

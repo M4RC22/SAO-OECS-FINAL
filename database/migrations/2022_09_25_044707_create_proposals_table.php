@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('duration_val');
             $table->string('duration_unit');
             $table->string('venue');
-            $table->string('organizer_name');
+            $table->foreignUuid('organizer_organization_user_id')->references('id')->on('organization_user');
+            // $table->string('organizer_name');
             $table->string('act_classification');
             $table->string('act_location');
             $table->string('description');

@@ -45,6 +45,11 @@ class Form extends Model
         return $this->belongsTo(Staff::class, 'sao_staff_id');
     }
 
+    public function getOrganizerInfo(){
+        return $this->belongsTo(OrganizationUser::class, 'organizer_organization_user_id', 'id');
+    }
+
+
 
 
     // For PDF
