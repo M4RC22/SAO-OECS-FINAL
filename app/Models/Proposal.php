@@ -18,6 +18,12 @@ class Proposal extends Model
         return $this->belongsTo(Form::class);
     }
 
+    public function getOrganizerInfo(){
+        return $this->belongsTo(OrganizationUser::class,  'organizer_organization_user_id', 'id');
+    }
+
+
+
     // PROPOSAL CHILD FORMS
     public function preprograms()
     {
