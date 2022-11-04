@@ -252,7 +252,7 @@
                                             <x-input x-model="field.service"  id="service" class="mt-1 w-full" type="text" name="service[]" readonly autofocus />
                                         </x-table.body-col>
                                         <x-table.body-col>
-                                            <x-input x-model="field.date_needed" id="logistics_date_needed" class="mt-1 w-full" type="text" name="logistics_date_needed[]" readonly autofocus />
+                                            <x-input x-model="field.date_needed" id="logistics_date_needed" class="mt-1 w-full" type="date" name="logistics_date_needed[]" readonly autofocus />
                                         </x-table.body-col>
                                         <x-table.body-col>
                                             <x-input x-model="field.venue" id="logistics_venue" class="mt-1 w-full" type="tel" name="logistics_venue[]" readonly autofocus />
