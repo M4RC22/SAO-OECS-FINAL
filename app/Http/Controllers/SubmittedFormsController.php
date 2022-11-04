@@ -464,7 +464,7 @@ class SubmittedFormsController extends Controller
             Mail::to($preparedByEmail)->send(new FormDoneEmail($formType));
         }else{
             Mail::to($preparedByEmail)->send(new ForwardFormNextApproverEmail($formType, $nextApprover, $formTitle));
-            Mail::to($nextEmail)->send(new FormApproverEmail($formType, $formTitle));
+            Mail::to($nextEmail, 'Helllo')->send(new FormApproverEmail($formType, $formTitle));
         }
         $message = $forms->event_title.' was approved!';
 
