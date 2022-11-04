@@ -1,8 +1,9 @@
 @php
     $isModeratorOrEditor = Auth::user()->checkRole('Moderator|Editor');
+    $encodedOrgList = json_encode($authOrgList);
+    $encodedMembersList = json_encode($members);
 @endphp
 <x-app-layout>
-
     <!-- Error Mesage -->
     <x-alert-message/>
     
@@ -86,7 +87,7 @@
 
 
                     {{-- Row #2 --}}
-                    <div class="grid grid-flow-row auto-rows-max gap-6 mt-4 md:grid-cols-3">
+                    <div x-data="populateOrganizer()" @load.window="loadOrgs('{{  $encodedOrgList }}'), loadMembers('{{  $encodedMembersList }}')" class="grid grid-flow-row auto-rows-max gap-6 mt-4 md:grid-cols-3">
 
                         {{-- Event Title --}}
                         <div>
@@ -99,7 +100,7 @@
                         {{-- Name of organization --}}
                         <div>
                             <x-label for="org_id" :value="__('Organization Name')" />
-                            <x-select class="mt-1" id="org_id" name="org_id" aria-label="Default select example" required @change="storeInput($el)">
+                            <x-select class="mt-1" id="org_id" name="org_id" aria-label="Default select example" required x-ref="organization" @change="storeInput($el), populateMembers($el)">
                                 <option value='' disabled selected>--select option--</option>
                                 @foreach($authOrgList as $org)
                                 <option value="{{$org->id}}">{{$org->org_name}}</option>
@@ -111,11 +112,8 @@
                         {{-- Name of organizer --}}
                         <div>
                             <x-label for="organizer_organization_user_id" :value="__('Name of Organizer')" />
-                            <x-select class="mt-1" id="organizer_organization_user_id" name="organizer_organization_user_id" aria-label="Default select example" required @change="storeInput($el)">
+                            <x-select class="mt-1" id="organizer_organization_user_id" name="organizer_organization_user_id" aria-label="Default select example" required x-ref="members" @change="storeInput($el)">
                                 <option value='' disabled selected>--select option--</option>
-                                @foreach($organizerList as $organizer)
-                                <option value="{{$organizer->id}}">{{$organizer->fromUser->first_name}} {{$organizer->fromUser->last_name}}</option>
-                                @endforeach
                             </x-select>
                             @error('organizer_organization_user_id')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
                         </div>

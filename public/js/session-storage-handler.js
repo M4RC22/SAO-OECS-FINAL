@@ -94,7 +94,7 @@ function forms_array(form){
         'venue', 
         'event_title', 
         'org_id',
-        'organizer_name', 
+        'organizer_organization_user_id', 
         'act_classification',
         'act_location', 
         'description', 

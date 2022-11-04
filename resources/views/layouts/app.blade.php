@@ -35,8 +35,11 @@
         {{-- Search Handler --}}
         <script src="{{ asset('js/search.js') }}" defer></script>
 
-        {{-- Search Handler --}}
+        {{-- Edit Handler --}}
         <script src="{{ asset('js/edit-handler.js') }}" defer></script>
+
+         {{-- APF Handler --}}
+         <script src="{{ asset('js/APF-handler.js') }}" defer></script>
 
 
          {{-- Charts External Link--}}

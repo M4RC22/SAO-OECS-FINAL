@@ -1,7 +1,9 @@
 @php
     $coorganizers = json_encode($proposal->externalCoorganizer()->get());    
     $requests = json_encode($proposal->logisticalNeed()->get());    
-    $activities = json_encode($proposal->prePrograms()->get());    
+    $activities = json_encode($proposal->prePrograms()->get());  
+    $encodedOrgList = json_encode($authOrgList);
+    $encodedMembersList = json_encode($members);  
 @endphp
 <x-app-layout>
     <div class="pt-24"> 
@@ -20,7 +22,7 @@
             <hr class="mt-3">
             
             <!-- Form Deinied - Message -->
-            <x-edit-form-message message="{{$forms->remarks}}" approver=""/>
+            <x-edit-form-message message="{{$forms->remarks}}" approver="{{$forms->curr_approver}}"/>
 
             <div class="bg-white mt-4 h-auto w-full rounded-sm shadow-sm px-6 py-4">
                 <form action="{{ route('forms.activity-proposal.update', ['forms' => $forms->id]) }}" method="POST">
@@ -70,23 +72,23 @@
 
 
                     {{-- Row #2 --}}
-                    <div class="grid grid-flow-row auto-rows-max gap-6 mt-4 md:grid-cols-3">
+                    <div x-data="populateOrganizer()" @load.window="loadOrgs('{{  $encodedOrgList }}'), loadMembers('{{  $encodedMembersList }}')" class="grid grid-flow-row auto-rows-max gap-6 mt-4 md:grid-cols-3">
 
                         {{-- Event Title --}}
                         <div>
                             <x-label for="event_title" :value="__('Event Title')" />
 
-                            <x-input id="event_title" class="mt-1 w-full" type="text" name="event_title" value="{{$forms->event_title}}"  required autofocus />
+                            <x-input id="event_title" class="mt-1 w-full" type="text" name="event_title" value="{{$forms->event_title}}" required autofocus/>
                             @error('event_title')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
                         </div>
 
                         {{-- Name of organization --}}
                         <div>
                             <x-label for="org_id" :value="__('Organization Name')" />
-                            <x-select class="mt-1" id="org_id" name="org_id" aria-label="Default select example" required>
+                            <x-select class="mt-1" id="org_id" name="org_id" aria-label="Default select example" required x-ref="organization" @change="populateMembers($el)">
                                 <option value='' disabled selected>--select option--</option>
                                 @foreach($authOrgList as $org)
-                                <option {{ $forms->organization_id == $org->id ? 'selected' : '' }} value="{{$org->id}}">{{$org->org_name}}</option>
+                                <option value="{{$org->id}}">{{$org->org_name}}</option>
                                 @endforeach
                             </x-select>
                             @error('org_id')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
@@ -94,10 +96,11 @@
 
                         {{-- Name of organizer --}}
                         <div>
-                            <x-label for="organizer_name" :value="__('Name of Organizer')" />
-                            
-                            <x-input id="organizer_name" class="mt-1 w-full" type="text" name="organizer_name"  value="{{$proposal->organizer_name}}"  required autofocus/>
-                            @error('organizer_name')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
+                            <x-label for="organizer_organization_user_id" :value="__('Name of Organizer')" />
+                            <x-select class="mt-1" id="organizer_organization_user_id" name="organizer_organization_user_id" aria-label="Default select example" required x-ref="members" @load.window="edit('{{ $proposal->organizer_organization_user_id }}')">
+                                <option value='' disabled selected>--select option--</option>
+                            </x-select>
+                            @error('organizer_organization_user_id')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror
                         </div>
 
                     </div>

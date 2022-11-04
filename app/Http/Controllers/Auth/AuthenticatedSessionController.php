@@ -65,7 +65,7 @@ class AuthenticatedSessionController extends Controller
             //Checks if user password is equal to stored password in api and if user is professor
             if($getUser->password != $request->password){
                 throw ValidationException::withMessages(['errors' => 'These credentials do not match our records.']);
-            }elseif($getUser->userType != "Professor"){
+            }elseif($getUser->userType != "Professor" || $getUser->userType != "Staff"){
                 throw ValidationException::withMessages(['errors' => 'Sorry, invalid login.']);
             }else{
 
