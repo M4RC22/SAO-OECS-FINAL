@@ -40,8 +40,18 @@ class APFController extends Controller
         // Shows all members of the $chosenOrg
         $organizerList = OrganizationUser::whereIn('organization_id', $orgArray)->get();
 
-        return view('_student-organization.forms.activity-proposal', compact('authOrgList', 'organizerList'))
-        ->with("message", "Hello APF!");
+        $members = [];
+
+
+        foreach($organizerList as $member){
+            array_push($members, [
+                'id' => $member->id,
+                'organization_id' => $member->organization_id,
+                'name' => $member->fromUser()->first()->first_name." ".$member->fromUser()->first()->last_name,
+            ]);
+        }
+
+        return view('_student-organization.forms.activity-proposal', compact('authOrgList', 'members'));
     }
 
     // save form

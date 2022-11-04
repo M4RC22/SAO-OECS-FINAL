@@ -532,6 +532,7 @@ class DashboardController extends Controller
     // show form to edit
     public function show(Form $forms)
     {
+
         $authOrgList = Auth::user()->studentOrg;
         $message = $forms->remarks;
 
@@ -548,8 +549,32 @@ class DashboardController extends Controller
                 $query->where('user_id', $authId);
                 $query->whereIn('role', ['Moderator', 'Editor']);
             })->get();
+
+            $auth = auth()->user();
+            $authId = $auth->id;
     
-            return view('_student-organization.edit-forms.activity-proposal', compact('forms','message', 'authOrgList', 'proposal', 'externalCoorganizers', 'logisticalNeeds', 'preprograms' ));
+            $myOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
+                $query->where('user_id', $authId);
+                $query->whereIn('role', ['Moderator', 'Editor']);
+            })->get();
+    
+            $orgArray = $myOrgList->pluck('id')->toArray();
+            
+            // Shows all members of the $chosenOrg
+            $organizerList = OrganizationUser::whereIn('organization_id', $orgArray)->get();
+    
+            $members = [];
+    
+    
+            foreach($organizerList as $member){
+                array_push($members, [
+                    'id' => $member->id,
+                    'organization_id' => $member->organization_id,
+                    'name' => $member->fromUser()->first()->first_name." ".$member->fromUser()->first()->last_name,
+                ]);
+            }
+    
+            return view('_student-organization.edit-forms.activity-proposal', compact('forms','message', 'authOrgList', 'proposal', 'externalCoorganizers', 'logisticalNeeds', 'preprograms', 'authOrgList', 'members' ));
     
         }elseif($forms->form_type === 'BRF'){
 
@@ -562,6 +587,7 @@ class DashboardController extends Controller
                 $query->where('status','Pending');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
             $departments = Department::orderBy('name')->get();
+
 
             return view('_student-organization.edit-forms.budget-requisition', compact('forms','message', 'authOrgList', 'eventList', 'departments', 'requisition', 'reqItems'));
 

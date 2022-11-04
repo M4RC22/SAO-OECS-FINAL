@@ -74,7 +74,7 @@
                             </x-svg>
                             <h1 class="text-xl tracking-wide"><strong>The Form was Denied!</strong></h1>
                         </div>
-                        <p class="text-sm mb-2"><b>Approver: </b>Sample Approver</p>
+                        <p class="text-sm mb-2"><b>Approver: </b>{{ $approver }}</p>
                         <hr class="border-yellow-700 opacity-30">
                         <p class="text-sm mt-2"><b>Message: </b>{{ $message }}</p>
                     </div>

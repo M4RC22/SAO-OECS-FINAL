@@ -17,7 +17,7 @@
             <hr class="mt-3">
 
             <!-- Form Deinied - Message -->
-            <x-edit-form-message message="{{$forms->remarks}}" approver=""/>
+            <x-edit-form-message message="{{$forms->remarks}}" approver="{{$forms->curr_approver}}"/>
 
             <div class="bg-white mt-4 h-auto w-full rounded-sm shadow-sm px-6 py-4">
                 <form action="{{ route('forms.requisition.update', ['forms' => $forms->id]) }}" method="POST">
