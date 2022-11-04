@@ -294,12 +294,15 @@ class SubmittedFormsController extends Controller
         $done = 'Done';
         $approved = 'Approved';
         $formType = $forms->form_type;
-        $currEmail = $user->email;
+        $nextEmail ='';
         $preparedByEmail = $forms->fromOrgUser->fromUser->email;
         $nextApprover = '';
         $formTitle = $forms->event_title;
         // dd($preparedByEmail);
 
+        // $nextEmail = $forms->getFormSao->staffUser->email;
+        // $nextEmail = $forms->getFormAcadserv->staffUser->email;
+        // $nextEmail = $forms->getFormFinance->staffUser->email;
 
        
         /********************************************************************************
@@ -317,6 +320,8 @@ class SubmittedFormsController extends Controller
                     ));
 
             $nextApprover = 'SAO';
+            $nextEmail = $forms->getFormSao->staffUser->email;
+
 
 
         }
@@ -354,6 +359,7 @@ class SubmittedFormsController extends Controller
                     ));
 
             $nextApprover = 'Finance';
+            $nextEmail = $forms->getFormFinance->staffUser->email;
             
         }
 
@@ -392,6 +398,8 @@ class SubmittedFormsController extends Controller
 
             
             $nextApprover = 'SAO';
+            $nextEmail = $forms->getFormSao->staffUser->email;
+
             
 
         }
@@ -406,6 +414,8 @@ class SubmittedFormsController extends Controller
                     ));
 
             $nextApprover = 'Academic Services';
+            $nextEmail = $forms->getFormAcadserv->staffUser->email;
+
                 
         }
 
@@ -419,6 +429,8 @@ class SubmittedFormsController extends Controller
                     ));
 
             $nextApprover = 'Finance';
+            $nextEmail = $forms->getFormFinance->staffUser->email;
+
             
         }
 
@@ -452,7 +464,7 @@ class SubmittedFormsController extends Controller
             Mail::to($preparedByEmail)->send(new FormDoneEmail($formType));
         }else{
             Mail::to($preparedByEmail)->send(new ForwardFormNextApproverEmail($formType, $nextApprover, $formTitle));
-            Mail::to($currEmail)->send(new FormApproverEmail($formType, $formTitle));
+            Mail::to($nextEmail)->send(new FormApproverEmail($formType, $formTitle));
         }
         $message = $forms->event_title.' was approved!';
 
