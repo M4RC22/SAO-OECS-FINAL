@@ -129,6 +129,10 @@ $pendingFormCount = count($forms);
 
 
   <script>
+
+    let month = new Date().getMonth();
+
+    console.log(month)
     const preEvent = {
       datasets: [{
         label: 'Approved Pre-Event Forms for The Month',

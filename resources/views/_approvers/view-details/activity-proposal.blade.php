@@ -57,7 +57,7 @@
 
                 {{-- Row #5 --}}
                 <div class="grid grid-flow-row auto-rows-max gap-6 mt-4 md:grid-cols-4 mb-4">
-                    <p class="text-bland-600 font-bold">Email: <span class="font-normal">  {{$forms->fromOrgUser->fromUser->email}} </span></p>
+                    <p class="text-bland-600 font-bold col-span-2">Email: <span class="font-normal">  {{$forms->fromOrgUser->fromUser->email}} </span></p>
                     <p class="text-bland-600 font-bold md:col-start-4">Contact Number: <span class="font-normal">  {{$forms->fromOrgUser->fromUser->phone_number}} </span></p>
                 </div>
 
