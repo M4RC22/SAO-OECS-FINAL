@@ -1,11 +1,12 @@
 @php
+    Helper::isAuthorized('Moderator|Editor', $forms->organization_id);
     $programs = json_encode($postPrograms);
     $participants = json_encode($participants);
     $commentsSuggestions = json_encode($commentSuggestions);
     $ratings = json_encode($narrative->ratings);
 @endphp
 <x-app-layout>
-    <div class="pt-24">
+    <div class="py-24">
         <div class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between flex-wrap">
                 <h1 class="flex items-center text-xl">

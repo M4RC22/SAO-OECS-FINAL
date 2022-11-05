@@ -93,7 +93,7 @@
             </div>
             @endif
 
-            @if(Auth::user()->checkUsertype('Student|Professor|Staff'))
+            @if(auth()->user()->isOrgMember() || Helper::isApprover())
             {{-- Roles --}}
             <x-sidebar-nav-link :href="route('organization.index')" active="{{ Helper::checkRoute('organization') }}" @click="dropdown = false">
                 <x-slot name="icon">

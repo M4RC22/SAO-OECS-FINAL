@@ -3,15 +3,7 @@
 @endphp
 <x-app-layout>
     @if(!$isOrgMember)
-    <div class="mt-14 h-auto w-full rounded-sm px-6 py-4">
-        <div class="flex flex-col justify-center items-center py-16 px-2 md:px-8">
-            <img class="w-auto h-auto sm:h-96 object-cover" src="{{ asset('assets/img/group.png')}}" alt="No Organization"/>
-            <div class="text-center space-y-3 mt-6">
-                <h1 class="text-2xl text-bland-500 font-bold tracking-wide">Woops! You're Not An Organization Member. 😅 </h1>
-                <p class="text-sm text-bland-400">You are not yet part of any organization. Why not try joining one? it's fun! </p>
-            </div>
-        </div>
-    </div>
+        <x-apply-organization/>
     @else
     <!-- table -->
     <div class="pt-24">    

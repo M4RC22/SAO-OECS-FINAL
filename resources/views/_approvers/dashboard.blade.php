@@ -58,7 +58,7 @@ $pendingFormCount = count($forms);
   </div> 
 
   {{-- Row #3 --}}
-  <div class="grid grid-cols-1 gap-4 mt-4 px-4 lg:px-8 md:grid-cols-2">
+  <div class="grid grid-cols-1 gap-4 mt-4 px-4 lg:px-8 md:grid-cols-2 pb-24">
 
     <!-- Pre-Event Forms -->
     <div class="bg-white w-auto p-4 shadow-sm">

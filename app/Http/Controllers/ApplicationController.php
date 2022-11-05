@@ -51,7 +51,7 @@ class ApplicationController extends Controller
         Mail::to($sao)->send(new OrgApplicationEmail($orgApplicant));
 
 
-        return redirect()->back()->with('add', 'Your application was sent successfully!');
+        return redirect()->back()->with('add', 'Your application was sent!');
     }
 
     public function show($id)

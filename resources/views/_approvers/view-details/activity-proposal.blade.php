@@ -2,7 +2,7 @@
     $isStudent = auth()->user()->checkUserType('Student');
 @endphp
 <x-app-layout>
-    <div x-data="{denyForm: false, modal:false}" class="pt-24"> 
+    <div x-data="{denyForm: false, modal:false}" class="py-24"> 
         <div x-data="{approveForm: false, modal:false}" class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between flex-wrap">
                 <h1 class="flex items-center text-xl">
@@ -171,16 +171,16 @@
                                 @foreach($logisticalNeeds as $logistic)
                                 <tr class="bg-white  hover:bg-bland-100 border-b border-bland-20">
                                     <x-table.body-col>
-                                        <p class="pl-2"> {{$i++}} </p>
+                                        <p class="pl-2">{{$i++}} </p>
                                     </x-table.body-col>
                                     <x-table.body-col>
-                                        <p class="pl-2"> {{$logistic->service}} </p>
+                                        <p class="pl-2">{{$logistic->service}} </p>
                                     </x-table.body-col>
                                     <x-table.body-col>
-                                        <p class="pl-2"> {{$logistic->venue}} </p>
+                                        <p class="pl-2">{{date('M d, Y ', strtotime($logistic->date_needed))}} </p>
                                     </x-table.body-col>
                                     <x-table.body-col>
-                                        <p class="pl-2"> {{date('M d, Y ', strtotime($logistic->date_needed))}} </p>
+                                        <p class="pl-2">{{$logistic->venue}} </p>
                                     </x-table.body-col>
                                 </tr>
                                 @endforeach

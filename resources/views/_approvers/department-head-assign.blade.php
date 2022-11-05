@@ -3,7 +3,7 @@
     <!-- Error Mesage -->
     <x-alert-message/>
 
-    <div x-data="{ replace:false, modal:false }" class="pt-24">
+    <div x-data="{ replace:false, modal:false }" class="py-24">
         <div class="px-4 lg:px-8">
             <h1 class="text-xl"><span class="text-primary-blue hover:text-semantic-info"> <a href="{{ route('department-heads.index') }}"> Department Heads </a></span>/ Replace Department Head
             <div class="flex flex-col">

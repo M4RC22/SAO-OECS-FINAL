@@ -2,7 +2,7 @@
     $isStudent = auth()->user()->checkUserType('Student');
 @endphp
 <x-app-layout>
-    <div x-data="{denyForm: false, modal:false}" class="pt-24"> 
+    <div x-data="{denyForm: false, modal:false}" class="py-24"> 
         <div x-data="{approveForm: false, modal:false}" class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between flex-wrap">
                 <h1 class="flex items-center text-xl">

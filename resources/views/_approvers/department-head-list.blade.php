@@ -4,7 +4,7 @@
     <x-alert-message/>
 
     <!-- table -->
-    <div class="pt-24">    
+    <div class="py-24">    
         <div class="max-w-screen mx-auto px-4 lg:px-8">
             <h1 class="text-xl">Department Heads</h1>
             <x-table.main>

@@ -36,7 +36,7 @@
                 <x-table.body>
                     {{-- Insert Table Body Columns Here --}}
                     <x-table.body-col class="pl-6"> {{ $item->org_name }}</x-table.body-col>
-                    <x-table.body-col class="pl-6"> {{ $item->getUser()->first()->first_name }} {{ $item->getUser()->first()->first_name }}</x-table.body-col>
+                    <x-table.body-col class="pl-6"> {{ $item->getUser()->first()->first_name }} {{ $item->getUser()->first()->last_name }}</x-table.body-col>
                     <x-table.body-col class="pl-6">
                         <a class="text-primary-blue hover:text-blue-800 hover:underline hover:underline-offset-4" href="{{ route('org-application.show', ['id' => $item->id]) }}" >View</a>
                     </x-table.body-col>

@@ -261,14 +261,15 @@
                 Narrative Report
             </div>
             <div class="submittedBy">
-                Submitted By <br> 
+                Submitted By: <br> 
                 <!-- organization-->
-                <p>{{$form->myOrg->getOrgName->org_name}}</p>
+                <p>{{$form->fromOrguser()->first()->fromUser()->first()->first_name}} {{$form->fromOrguser()->first()->fromUser()->first()->last_name}}</p>
+                
             </div>
             <div class="preparedBy">
-                Prepared By
-                <!-- Prepared By-->
-                <p>{{$form->fromOrguser()->first()->fromUser()->first()->first_name}} {{$form->fromOrguser()->first()->fromUser()->first()->last_name}}</p>
+                Organization:
+                <!--Prepared By-->
+                <p>{{$form->myOrg->getOrgName->org_name}}</p>
             </div>
 
             <!--PAGE BREAK-->
