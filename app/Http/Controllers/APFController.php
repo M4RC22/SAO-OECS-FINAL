@@ -165,9 +165,16 @@ class APFController extends Controller
 
         $proposal = $forms->proposal()->first();
 
+        // Remove old child forms
+        $proposal->logisticalNeed()->delete();
+        $proposal->externalCoorganizer()->delete();
+        $proposal->preprograms()->delete();
+
+
+        // Create new child forms
          // Logistics update
          for($i = 0; $i < count($request->service); $i++){
-            $proposal->logisticalNeed()->update([
+            $proposal->logisticalNeed()->create([
                     'service' => $request->service[$i],
                     'date_needed' => $request->logistics_date_needed[$i],
                     'venue' => $request->logistics_venue[$i],
@@ -176,7 +183,7 @@ class APFController extends Controller
 
          // External Coorg update
          for($i = 0; $i < count($request->coorganization); $i++){
-            $proposal->externalCoorganizer()->update([
+            $proposal->externalCoorganizer()->create([
                     'coorganization' => $request->coorganization[$i],
                     'coorganizer' => $request->coorganizer_name[$i],
                     'email' => $request->coorganizer_email[$i],
@@ -186,7 +193,7 @@ class APFController extends Controller
 
         // Pre-programs update
         for($i = 0; $i < count($request->activity); $i++){
-            $proposal->preprograms()->update([
+            $proposal->preprograms()->create([
                     'activity' => $request->activity[$i],
                     'start_date_time' => $request->start_date[$i],
                     'end_date_time' => $request->end_date[$i],

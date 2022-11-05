@@ -173,7 +173,7 @@ class SubmittedFormsController extends Controller
                         });        
                     }
                 }
-            })->paginate();
+            })->paginate()->sortByDesc('created_at');
 
             // dd($isAdviser, $isSaoHead, $isAcadServHead, $isFinanceHead);// -> Uncomment me later!!!       
 
