@@ -160,7 +160,7 @@ class RecordsController extends Controller
 
                     }
                     
-                })->paginate(10);
+                })->paginate(10)->sortByDesc('updated_at');
 
             
                     $records = [];
