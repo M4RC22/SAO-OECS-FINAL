@@ -126,12 +126,15 @@ class LFController extends Controller
 
         $liquidation = $forms->liquidation()->first();
 
+        $liquidation->proofOfPayment()->delete();
+        $liquidation->liquidationItem()->delete();
+
        // Proof of Payments update
        for($i = 0; $i < count($request->itemFrom); $i++){
         //store image in storage before inserting to databse.
         $imagePath = $request->image[$i]->store('uploads/receipts', 'public');
         
-        $liquidation->proofOfPayment()->update([
+        $liquidation->proofOfPayment()->create([
             'item_from' => $request->itemFrom[$i],
             'item_to' => $request->itemTo[$i],
             'image' => $imagePath,
@@ -140,7 +143,7 @@ class LFController extends Controller
 
         // Liquidation Items update
         for($i = 0; $i < count($request->item_number); $i++){
-            $liquidation->liquidationItem()->update([
+            $liquidation->liquidationItem()->create([
                     'item_number' => $request->item_number[$i],
                     'date_bought' => $request->date_bought[$i],
                     'item' => $request->item[$i],

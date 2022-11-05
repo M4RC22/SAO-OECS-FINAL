@@ -120,9 +120,11 @@ class RFController extends Controller
 
         $requisition = $forms->requisition()->first();
 
+        $requisition->reqItems()->delete();
+
         // Req_Items update
         for($i = 0; $i < count($request->quantity); $i++){
-            $requisition->reqItems()->update([
+            $requisition->reqItems()->create([
                     'quantity' => $request->quantity[$i],
                     'purposes' => $request->purpose[$i],
                     'price' => $request->price[$i],

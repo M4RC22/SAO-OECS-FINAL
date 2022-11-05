@@ -162,16 +162,21 @@ class NRController extends Controller
 
         $narrative = $forms->narrative()->first();
 
+        $narrative->narrativeImage()->delete();
+        $narrative->participant()->delete();
+        $narrative->postProgram()->delete();
+        $narrative->commentSuggestion()->update();
+
            // Narrative Poster UPDATE
            $imagePath = $request->file('official_poster')->store('uploads/posters', 'public');
-           $narrative->narrativeImage()->update([
+           $narrative->narrativeImage()->create([
                'url' => $imagePath,
                'image_type' => 'poster'
            ]);
            // Narrative Event Images UPDATE
            for($i = 0; $i < count($request->file('event_images')); $i++){
                $imagePath = $request->file('event_images')[$i]->store('uploads/photos', 'public');
-               $narrative->narrativeImage()->update([
+               $narrative->narrativeImage()->create([
                    'url' => $imagePath,
                    'image_type' => 'photo'
                ]);
@@ -179,7 +184,7 @@ class NRController extends Controller
    
            // Participants UPDATE
            for($i = 0; $i < count($request->first_name); $i++){
-               $narrative->participant()->update([
+               $narrative->participant()->create([
                        'first_name' => $request->first_name[$i],
                        'last_name' => $request->last_name[$i],
                        'section' => $request->section[$i],
@@ -189,7 +194,7 @@ class NRController extends Controller
    
            // Post Programs UPDATE
            for($i = 0; $i < count($request->activity); $i++){
-               $narrative->postProgram()->update([
+               $narrative->postProgram()->create([
                        'activity' => $request->activity[$i],
                        'start_date' => $request->start_date[$i],
                        'end_date' => $request->end_date[$i],
@@ -198,7 +203,7 @@ class NRController extends Controller
    
            // Comment Suggestions UPDATE
            for($i = 0; $i < count($request->comments); $i++){
-               $narrative->commentSuggestion()->update([
+               $narrative->commentSuggestion()->create([
                       'message' => $request->comments[$i],
                       'type' => 'comment'
                ]);
@@ -206,7 +211,7 @@ class NRController extends Controller
    
            // Comment Suggestions UPDATE
            for($i = 0; $i < count($request->suggestions); $i++){
-               $narrative->commentSuggestion()->update([
+               $narrative->commentSuggestion()->create([
                       'message' => $request->suggestions[$i],
                       'type' => 'suggestion'
                ]);
