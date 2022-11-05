@@ -203,14 +203,15 @@
                 Activity Proposal Form
             </div>
             <div class="submittedBy">
-                Submitted By <br> 
+                Submitted By: <br> 
                 <!-- organization-->
-                <p>{{$form->myOrg->getOrgName->org_name}}</p>
+                <p>{{$form->fromOrguser()->first()->fromUser()->first()->first_name}} {{$form->fromOrguser()->first()->fromUser()->first()->last_name}}</p>
+                
             </div>
             <div class="preparedBy">
-                Prepared By
+                Organization:
                 <!--Prepared By-->
-                <p>{{$form->fromOrguser()->first()->fromUser()->first()->first_name}} {{$form->fromOrguser()->first()->fromUser()->first()->last_name}}</p>
+                <p>{{$form->myOrg->getOrgName->org_name}}</p>
             </div>
 
             <!--PAGE BREAK-->
@@ -252,9 +253,9 @@
                     <tbody>  
                         <tr>
                             <!--Organizer Name-->
-                            <td class="organizerName"><b>Organizer Name: </b>{{$proposal->organizer_name}}</td>
+                            <td class="organizerName"><b>Organizer Name: </b>{{$proposal->getOrganizerInfo->fromUser->first_name}} {{$proposal->getOrganizerInfo->fromUser->last_name}}</td>
                             <!--Organizer email-->
-                            <td class="email"><b>Email: </b>{{$form->fromOrgUser->fromUser->email}}</td>
+                            <td class="email"><b>Email: </b>{{$proposal->getOrganizerInfo->fromUser->email}}</td>
                         </tr>
                         <tr>
                             <!--Organization-->

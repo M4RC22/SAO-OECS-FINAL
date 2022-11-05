@@ -1,8 +1,9 @@
 @php
+    Helper::isAuthorized('Moderator|Editor', $forms->organization_id);
     $items = json_encode($reqItems);
 @endphp
 <x-app-layout>
-    <div class="pt-24"> 
+    <div class="py-24"> 
         <div class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between flex-wrap">
                 <h1 class="flex items-center text-xl">

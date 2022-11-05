@@ -66,7 +66,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="pb-24" x-data="loader()">
+            <main x-data="loader()">
                 {{ $slot }}
             </main>
 

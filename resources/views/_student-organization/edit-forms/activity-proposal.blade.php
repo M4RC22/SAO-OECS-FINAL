@@ -1,4 +1,5 @@
 @php
+    Helper::isAuthorized('Moderator|Editor', $forms->organization_id);
     $coorganizers = json_encode($proposal->externalCoorganizer()->get());    
     $requests = json_encode($proposal->logisticalNeed()->get());    
     $activities = json_encode($proposal->prePrograms()->get());  
@@ -6,7 +7,7 @@
     $encodedMembersList = json_encode($members);  
 @endphp
 <x-app-layout>
-    <div class="pt-24"> 
+    <div class="py-24"> 
         <div class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between flex-wrap">
                 <h1 class="flex items-center text-xl">
@@ -86,9 +87,9 @@
                         <div>
                             <x-label for="org_id" :value="__('Organization Name')" />
                             <x-select class="mt-1" id="org_id" name="org_id" aria-label="Default select example" required x-ref="organization" @change="populateMembers($el)">
-                                <option value='' disabled selected>--select option--</option>
+                                <option value='' disabled >--select option--</option>
                                 @foreach($authOrgList as $org)
-                                <option value="{{$org->id}}">{{$org->org_name}}</option>
+                                <option value="{{$org->id}}" {{ ($org->id === $forms->organization_id) ? 'selected' : '' ;}}>{{$org->org_name}}</option>
                                 @endforeach
                             </x-select>
                             @error('org_id')<p class="text-red-500 text-xs mt-1">{{$message}}</p>@enderror

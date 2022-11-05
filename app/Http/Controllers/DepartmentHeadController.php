@@ -65,43 +65,42 @@ class DepartmentHeadController extends Controller
      */
     public function update(Request $request, $departmentId, $userId)
     {
+        //Check if user alredy have data on the 'users' table
+        if(User::where('email', $request->email)->doesntExist()){
+            //fetch from dummy user api
+            //Get key. if user is not in api = error
+            $response = json_decode(Http::get('https://sao-oecs-users.herokuapp.com/users'));
+            $key = array_search($request->email, array_column($response, 'email'));
 
-        //fetch from dummy user api
-        //Get key. if user is not in api = error
-        $response = json_decode(Http::get('https://sao-oecs-users.herokuapp.com/users'));
-        $key = array_search($request->email, array_column($response, 'email'));
+            // // valitdate request
+            $request->validate([ 
+                'email' =>  [
+                    'required',
+                    'email',
+                    // Rule::unique('user','email'),
+                    
+                    function($attribute, $value, $fail){
+                        $response = json_decode(Http::get('https://sao-oecs-users.herokuapp.com/users'));
+                        $key = array_search($value, array_column($response, 'email'));  
+                        $inUsers = User::where('email', $value)->exists();
 
-        // // valitdate request
-        $request->validate([ 
-            'email' =>  [
-                'required',
-                'email',
-                // Rule::unique('user','email'),
-                
-                function($attribute, $value, $fail){
-                    $response = json_decode(Http::get('https://sao-oecs-users.herokuapp.com/users'));
-                    $key = array_search($value, array_column($response, 'email'));  
-                    $inUsers = User::where('email', $value)->exists();
-
-                    if($inUsers === false){
-                        if($key === false){
-                            $fail("User not found. Please use valid APC Email!");
+                        if($inUsers === false){
+                            if($key === false){
+                                $fail("User not found. Please use valid APC Email!");
+                            }
                         }
-                    }
-                }],
-            ]
-        );
+                    }],
+                ]
+            );
 
-        //create/store fetched
-        $getUser = $response[$key+1];
+            //create/store fetched
+            $getUser = $response[$key+1];
 
-        //Check if user is staff
-        if($getUser->userType != "Staff" && $getUser->userType != "Professor"){
-            return Redirect::route('department-heads.index')->with('error', "Sorry, the action is cannot be done!");
-        }
-        
-        //Check if user have alredy have data on the 'users' table
-        if(!User::where('email', $request->email)->exists()){
+            //Check if user is staff or professor
+            if($getUser->userType != "Staff" && $getUser->userType != "Professor"){
+                return Redirect::route('department-heads.index')->with('error', "Sorry, the action is cannot be done!");
+            }
+            
             $user = User::create([
                 'first_name' => $getUser->firstName,
                 'middle_name' => $getUser->middleName,
@@ -110,7 +109,7 @@ class DepartmentHeadController extends Controller
                 'email' => $getUser->email,
                 'user_type' => $getUser->userType,
                 'password' => bcrypt($getUser->password)
-            ]);
+                ]);
 
         }else{
             $recruiteeId = User::where('email', $request->email)->first()->id;
@@ -148,7 +147,7 @@ class DepartmentHeadController extends Controller
 
 
 
-        return Redirect::route('department-heads.index')->with('add', 'New Department Head was assigned successfully!');
+        return Redirect::route('department-heads.index')->with('add', 'New Department Head was assigned!');
         dd('tes');
     }
 

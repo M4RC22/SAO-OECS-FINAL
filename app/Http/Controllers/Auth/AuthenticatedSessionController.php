@@ -65,7 +65,7 @@ class AuthenticatedSessionController extends Controller
             //Checks if user password is equal to stored password in api and if user is professor
             if($getUser->password != $request->password){
                 throw ValidationException::withMessages(['errors' => 'These credentials do not match our records.']);
-            }elseif($getUser->userType != "Professor" || $getUser->userType != "Staff"){
+            }elseif($getUser->userType != "Professor"){
                 throw ValidationException::withMessages(['errors' => 'Sorry, invalid login.']);
             }else{
 
@@ -82,9 +82,7 @@ class AuthenticatedSessionController extends Controller
 
                 //Attach user to their corresponding department
                 $departmentId = DB::table('departments')->where('name', '=', $getUser->departmentName)->pluck('id');
-                $uuid = Str::uuid()->toString();
-                $user->userStaff()->insert([
-                    'id' => $uuid,
+                $user->userStaff()->create([
                     'user_id' => $user->id,
                     'department_id' => $departmentId->first(),
                     'position' => $getUser->departmentPosition,

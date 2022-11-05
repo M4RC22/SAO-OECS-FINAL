@@ -16,7 +16,7 @@
     <x-alert-message/>   
 
     <!-- table -->
-    <div class="mt-8">
+    <div class="mt-8 pb-24">
         <div class="max-w-screen mx-auto px-4 lg:px-8">
             <div class="flex justify-between">
                 <h1 class="text-lg">Members ({{ $totalMembers }})</h1>

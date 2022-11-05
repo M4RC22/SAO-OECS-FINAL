@@ -12,7 +12,7 @@
 <x-modal name="approveForm" width="w-[500px]">
     <div class="text-sm text-bland-600 text-left py-5">
         By clicking <span class="bg-semantic-success text-white rounded-md px-1">
-            Confirm</span> I am confident enough to give my approval to <b>{{ $orgName }} </b> 
+            Confirm</span>, I am confident enough to give my approval to <b>{{ $orgName }} </b> 
             for their form <b>{{ $eventTitle }} - {{ $formTypes[$formType] }}</b>, since I don't see any typographical error and no 
             violation committed.
     </div>

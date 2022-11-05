@@ -20,6 +20,10 @@ class OrganizationController extends Controller
 {
     public function index()
     {
+        if(!(auth()->user()->isOrgMember() || Helper::isApprover())){
+            abort(403);
+        }
+        
         $getAuthOrgList = Auth::user()->studentOrg;
 
         //Pagination

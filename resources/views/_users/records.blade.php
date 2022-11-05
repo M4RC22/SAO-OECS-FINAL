@@ -18,7 +18,7 @@
     @else
     {{-- If there's a record --}}
     <!-- Actions -->
-    <div x-data="search()" @load.window="addForms('{{ $encryptedRecords }}')" class="pt-24">
+    <div x-data="search()" @load.window="addForms('{{ $encryptedRecords }}')" class="py-24">
         <div class="px-4 lg:px-8">
             <div class="flex justify-end flex-nowrap">
                 <div class="relative shadow-sm">
