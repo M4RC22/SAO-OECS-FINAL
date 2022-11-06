@@ -40,7 +40,7 @@ class NRController extends Controller
 
          // get ID for approvers
          $orgAdviser = OrganizationUser::where('organization_id',$event->organization_id)
-         ->where('position', 'Adviser')->pluck('id')->first();
+         ->where('position', 'Adviser')->first();
 
         //Check first if student organization have an adviser before continuing the process, else return error. 
         if($orgAdviser === null){
@@ -65,7 +65,7 @@ class NRController extends Controller
             'organization_id' => $event->organization_id,
             'prep_by' => auth()->id(),
             'control_number'=> $this->generateUniqueCode(),
-            'organization_user_adviser_id' => $orgAdviser,
+            'organization_user_adviser_id' => $orgAdviser->id,
             'sao_staff_id' => $sao,
             'acadserv_staff_id' => $acadserv,
             'finance_staff_id' => $finance ,

@@ -63,7 +63,7 @@
             .row1 .row1Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row1 .row1Table td {
                 padding: 8px 8px;
@@ -110,7 +110,7 @@
             .row3 .row3Table {
                 width: 100%;
                 height: 50%;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row3 .row3Table td {
                 padding: 8px 8px;
