@@ -63,7 +63,7 @@
             .row1 .row1Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row1 .row1Table td {
                 padding: 8px 8px;
@@ -71,7 +71,7 @@
             .row2 .row2Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row2 .row2Table td {
                 padding: 8px 8px;
@@ -80,38 +80,45 @@
                 padding-top: 24px;
                 padding-bottom: 24px;
             }
-            .row3 .coorganizer {
+            .row3 .coorganizer{
                 font-size: 28px;
                 padding-bottom: 16px;
             }
-            .row3 .row3Table {
+            .row3Table {
+                font-family: Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
                 width: 100%;
-                table-layout: fixed;
-                padding: 16px 24px;
-                background-color: #E9E9E9;
             }
-            .row3 .row3Table td {
-                padding-top: 10px;
+            .row3Table td, .row3Table th {
+                border: 1px solid #ddd;
+                padding: 8px;
             }
-            .row4 {
-                padding-top: 24px;
-                padding-bottom: 24px;
+            .row3Table tr:nth-child(even){
+                background-color: #f2f2f2;
+            }
+            .row3Table th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #e6b800;
+                color: black;
             }
             .row4 .row4Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row4 .row4Table td {
-                padding: 10px 10px;
+                padding: 8px 8px;
             }
             .row5 .row5Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
+                overflow-wrap: break-word;
             }
             .row5 .row5Table td {
-                padding: 10px 10px;
+                padding: 8px 8px;
             }
             .row6 {
                 padding-top: 24px;
@@ -269,6 +276,7 @@
 
             <hr>
 
+            <!--Section 3-->
             <div class="row5">
                 <table class="row5Table">
                     <thead>
@@ -284,7 +292,7 @@
             
             <hr>
 
-            <!--Section 3-->
+            <!--Section 4-->
             <div class="row3">
                 <div class="coorganizer">
                     Co-Organizer
@@ -292,6 +300,10 @@
                 <!--Table: Coorganizers-->
                 <table class="row3Table">
                     <thead>
+                        <th>Co-Organizer</th>
+                        <th>Co-Organization</th>
+                        <th>Email</th>
+                        <th>Contact Number</th>
                     </thead>
                     <tbody>
                         @php $i = 1; @endphp
@@ -299,79 +311,20 @@
                         <tr>
                             {{$i++}} 
                             <!--Organizer Name-->
-                            <td class="organizerName"><b>Co-Organizer: </b>{{$coorg->coorganizer}}</td>
-                            <!--Organizer email-->
-                            <td class="email"><b>Email: </b>{{$coorg->email}} </td>
-                        </tr>
-                        <tr class="tableRow2">
+                            <td class="organizerName">{{$coorg->coorganizer}}</td>
                             <!--Organization-->
-                            <td class="organization"><b>Co-Organization: </b>{{$coorg->coorganization}}</td>
+                            <td class="organization">{{$coorg->coorganization}} </td>
+                            <!--Email-->
+                            <td class="email">{{$coorg->email}}</td>
                             <!--Organizer contact number-->
-                            <td class="contactNumber"><b>Contact Number: </b>{{$coorg->phone_number}}</td>
+                            <td class="contactNumber">{{$coorg->phone_number}}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-    
-            <hr>
-
-            <!--Section 4-->
-            <div class="row4">
-                <table class="row4Table">
-                    <thead>
-                    </thead>
-                    <tbody>  
-                        <tr>
-                            <!--Primary Target-->
-                            <td class="primaryTarget"><b>Primary Target Participants/Audience: </b>{{$proposal->primary_audience}}</td>
-                            <!--Num Primary Target-->
-                            <td class="numberofPrimary"><b>Number of Primary Participants/Audience: </b>{{$proposal->num_primary_audience}}</td>
-                        </tr>
-                        <tr>
-                            <!--Secondary Target-->
-                            <td class="secondaryTarget"><b>Secondary Target Participants/Audience: </b>{{$proposal->secondary_audience}}</td>
-                            <!--Num Secondary Target-->
-                            <td class="numberofSecondary"><b>Number of Secondary Participants/Audience: </b>{{$proposal->num_secondary_audience}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <hr>
 
             <!--Section 5-->
-            <div class="row5">
-                <table class="row5Table">
-                    <thead>
-                    </thead>
-                    <tbody>  
-                        <tr>
-                            <!--Rationale-->
-                            <td class="rationale"><b>Rationale: </b>{{$proposal->rationale}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <hr>
-    
-            <div class="row5">
-                <table class="row5Table">
-                    <thead>
-                    </thead>
-                    <tbody>  
-                        <tr>
-                            <!--Outcome-->
-                            <td class="rationale"><b>Outcome: </b>{{$proposal->outcome}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <hr>
-
-            <!--Section 6-->
             <div class="row6">
                 <div class="programs">
                     Programs
@@ -399,7 +352,7 @@
                 </table>
             </div>
         
-            <!--Section 7-->
+            <!--Section 6-->
             <div class="row7">
                 <div class="requests">
                     Requests
@@ -426,7 +379,64 @@
                     </tbody>
                 </table>
             </div>
+    
+            <hr>
 
+            <!--Section 7-->
+            <div class="row4">
+                <table class="row4Table">
+                    <thead>
+                    </thead>
+                    <tbody>  
+                        <tr>
+                            <!--Primary Target-->
+                            <td class="primaryTarget"><b>Primary Target Participants/Audience: </b>{{$proposal->primary_audience}}</td>
+                            <!--Num Primary Target-->
+                            <td class="numberofPrimary"><b>Number of Primary Participants/Audience: </b>{{$proposal->num_primary_audience}}</td>
+                        </tr>
+                        <tr>
+                            <!--Secondary Target-->
+                            <td class="secondaryTarget"><b>Secondary Target Participants/Audience: </b>{{$proposal->secondary_audience}}</td>
+                            <!--Num Secondary Target-->
+                            <td class="numberofSecondary"><b>Number of Secondary Participants/Audience: </b>{{$proposal->num_secondary_audience}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!--Section 8-->
+            <div class="row5">
+                <table class="row5Table">
+                    <thead>
+                    </thead>
+                    <tbody>  
+                        <tr>
+                            <!--Rationale-->
+                            <td class="rationale"><b>Rationale: </b>{{$proposal->rationale}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!--Section 9-->
+            <div class="row5">
+                <table class="row5Table">
+                    <thead>
+                    </thead>
+                    <tbody>  
+                        <tr>
+                            <!--Outcome-->
+                            <td class="rationale"><b>Outcome: </b>{{$proposal->outcome}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
 
             <!--Approvers-->
             <div class="row8">

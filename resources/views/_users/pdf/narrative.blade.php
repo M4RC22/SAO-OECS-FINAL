@@ -63,7 +63,7 @@
             .row1 .row1Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row1 .row1Table td {
                 padding: 8px 8px;
@@ -71,7 +71,8 @@
             .row2 .row2Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
+                overflow-wrap: break-word;
             }
             .row2 .row2Table td {
                 padding: 8px 8px;
@@ -145,7 +146,7 @@
             .row5 .row5Table {
                 width: 100%;
                 height: 50%;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row5 .row5Table td {
                 padding: 8px 8px;
@@ -165,7 +166,7 @@
             .row6 .row6Table {
                 width: 100%;
                 height: 25%;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row6 .row6Table td {
                 padding: 8px 8px;
@@ -178,10 +179,12 @@
                 font-size: 28px;
                 padding-bottom: 16px;
             }
-            .row7Table {
+            .row7 .row7Table {
                 font-family: Arial, Helvetica, sans-serif;
                 border-collapse: collapse;
                 width: 100%;
+                table-layout: fixed;
+                overflow-wrap: break-word;
             }
             .row7Table td, .row7Table th {
                 border: 1px solid #ddd;
@@ -205,10 +208,12 @@
                 font-size: 28px;
                 padding-bottom: 16px;
             }
-            .row8Table {
+            .row8 .row8Table {
                 font-family: Arial, Helvetica, sans-serif;
                 border-collapse: collapse;
                 width: 100%;
+                table-layout: fixed;
+                overflow-wrap: break-word;
             }
             .row8Table td, .row8Table th {
                 border: 1px solid #ddd;
@@ -227,7 +232,7 @@
             .row9 .row9Table {
                 width: 100%;
                 table-layout: fixed;
-                padding: 16px 24px;
+                padding: 16px 24px 0px 0px;
             }
             .row9 .row9Table td {
                 padding: 8px 8px;
