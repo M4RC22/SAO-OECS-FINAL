@@ -484,8 +484,12 @@ class SubmittedFormsController extends Controller
 
         $formType = $forms->form_type;
         if($formType === 'APF'){
-            $requisitionForm = Form::where('event_id', $forms->event_id)->where('form_type', 'BRF')->get();
-            $requisitionForm->update(array('status' => 'Denied', 'remarks' => $request->remarks));
+            $requisitionForm = Form::where('event_id', $forms->event_id)->where('form_type', 'BRF')->first();
+            // dd($requisitionForm);
+            if($requisitionForm){
+                $requisitionForm->update(array('status' => 'Denied', 'remarks' => $request->remarks));
+            }
+           
 
         }
         
