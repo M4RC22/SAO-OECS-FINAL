@@ -9,8 +9,8 @@
             <div class="w-28 h-28">
                 {{ $logo }}
             </div>
-            <h1 class="text-lg text-center text-slate-700 font-bold">Student Activites Office's
-                <br> Online Event Creation System </h1>
+            <h1 class="text-lg text-center text-slate-700 font-bold">Student Activities Office's
+                <br> Online Events Creation System </h1>
         </div>
 
         <!-- Bottom -->
