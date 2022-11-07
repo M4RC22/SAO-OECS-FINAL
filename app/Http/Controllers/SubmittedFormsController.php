@@ -479,12 +479,20 @@ class SubmittedFormsController extends Controller
 
     public function deny(Request $request, Form $forms)
     {
-        
+
         $forms->update(array('status' => 'Denied', 'remarks' => $request->remarks));
+
+        $formType = $forms->form_type;
+        if($formType === 'APF'){
+            $requisitionForm = Form::where('event_id', $forms->event_id)->where('form_type', 'BRF')->get();
+            $requisitionForm->update(array('status' => 'Denied', 'remarks' => $request->remarks));
+
+        }
+        
+        
 
         $message = $forms->event_title.' was denied!';
 
-        $formType = $forms->form_type;
         $formTitle = $forms->event_title;
         $preparedByEmail = $forms->fromOrgUser->fromUser->email;
         $formRemarks = $forms->remarks;

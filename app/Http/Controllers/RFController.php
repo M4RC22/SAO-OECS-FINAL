@@ -24,7 +24,7 @@ class RFController extends Controller
             ->where(function ($query) {
                 $authOrgList = Auth::user()->studentOrg->pluck('id')->toArray();
                 $query->whereIn('organization_id',$authOrgList);
-                $query->where('status','Pending');
+                $query->where('status','Pending')->orWhere('status','Approved');
             })->orderBy('event_title')->get(['event_title', 'event_id']);
 
 

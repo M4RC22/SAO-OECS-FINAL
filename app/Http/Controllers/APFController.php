@@ -33,7 +33,7 @@ class APFController extends Controller
         $authOrgList = Organization::whereHas('studentOrg', function ($query) use ($authId) {
             $query->where('user_id', $authId);
             $query->whereIn('role', ['Moderator', 'Editor']);
-        })->get();
+        })->get()->sortBy('org_name');
 
         $orgArray = $authOrgList->pluck('id')->toArray();
         
@@ -50,6 +50,12 @@ class APFController extends Controller
                 'name' => $member->fromUser()->first()->first_name." ".$member->fromUser()->first()->last_name,
             ]);
         }
+
+        // $sorted = usort($members, function ($a, $b) { return strnatcmp($a['name'], $b['name']); });
+
+        // // dd($members);
+
+        // dd($sorted);
 
         return view('_student-organization.forms.activity-proposal', compact('authOrgList', 'members'));
     }
