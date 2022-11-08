@@ -38,7 +38,8 @@ class OrganizationController extends Controller
     {
         Helper::isAuthorized('Moderator|Viewer|Editor', $orgId);
         $currOrg = Organization::with('studentOrg')->where('id', '=', $orgId)->first();
-        $getOrgMembers = $currOrg->studentOrg;
+        $getOrgMembers = $currOrg->studentOrg->sortBy('first_name');
+
         $totalMembers = count($getOrgMembers);
     
         $orgMembers = Helper::paginate($getOrgMembers, count($getOrgMembers), 10);
