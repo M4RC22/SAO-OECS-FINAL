@@ -35,7 +35,7 @@ class NRController extends Controller
 
     public function store(NRRequest $request)
     {
-        dd($request);
+        // dd($request);
         $nr = $request->safe()->only(['venue', 'narration', 'ratings' ]);
         $event = Form::where('event_id', $request->event_id)->get()->first();
 
