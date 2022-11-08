@@ -269,7 +269,7 @@
                                     <p class="text-xs font-bold text-blue-700">You can only upload a single file with file extension of JPG, PNG and JPEG</p>
                                 </div>
                                 <input class="form-control block w-96 px-3 py-1.5 my-4 font-normal text-sm text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="official_poster" accept="image/*" id="imgSelect" x-ref="singleFile" @change="previewFile" required>
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="official_poster" accept="image/*" id="imgSelect" x-ref="singleFile" @change="previewFile" >
                             </div>
                         </div>
 
@@ -303,7 +303,7 @@
                                     <p class="text-xs font-bold text-blue-700">You can upload multiple file with file extension of JPG, PNG and JPEG</p>
                                 </div>
                                 <input class="form-control block w-96 px-3 py-1.5 my-4 font-normal text-sm text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="event_images[]" accept="image/*" id="imgSelect" x-ref="multipleFile" @change="previewFile" multiple required>
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" type="file" name="event_images[]" accept="image/*" id="imgSelect" x-ref="multipleFile" @change="previewFile" multiple >
                             </div>
                         </div>
 

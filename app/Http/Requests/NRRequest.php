@@ -32,22 +32,22 @@ class NRRequest extends FormRequest
                 'start_date.*' => 'required', 
                 'end_date.*' => 'required', 
 
-                'first_name.*' => 'required', 
-                'last_name.*' => 'required', 
-                'section.*' =>'required', 
-                'participated_date.*' =>'required', 
+                // 'first_name.*' => 'required', 
+                // 'last_name.*' => 'required', 
+                // 'section.*' =>'required', 
+                // 'participated_date.*' =>'required', 
 
-                'comments.*' =>'required', 
-                'suggestions.*' =>'required', 
+            //     'comments.*' =>'required', 
+            //     'suggestions.*' =>'required', 
 
-                // 'event_images' => 'required',
-                'event_images.*' => 'image|mimes:png,jpg,jpeg',
-                'poster.*' => 'image|mimes:png,jpg,jpeg',
+            //     'event_images' => 'required',
+            //     'event_images.*' => 'image|mimes:png,jpg,jpeg',
+            //     'poster.*' => 'image|mimes:png,jpg,jpeg',
 
 
-                // 'poster' => 'required',
+            //     'poster' => 'required',
                 
-            'ratings' => 'required', 
+            // 'ratings' => 'required', 
 
 
             'programs' => 'required',
