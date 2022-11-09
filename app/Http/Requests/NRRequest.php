@@ -47,7 +47,7 @@ class NRRequest extends FormRequest
 
             //     'poster' => 'required',
                 
-            // 'ratings' => 'required', 
+            'ratings' => 'required', 
 
 
             'programs' => 'required',

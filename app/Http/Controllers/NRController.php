@@ -36,9 +36,10 @@ class NRController extends Controller
     public function store(NRRequest $request)
     {
         // dd($request);
-        $nr = $request->safe()->only(['venue', 'narration', 'ratings' ]);
-        $event = Form::where('event_id', $request->event_id)->get()->first();
+        $nr = $request->safe()->only(['venue', 'narration', 'ratings']);
+        // dd($nr,  $request->ratings, $request);
 
+        $event = Form::where('event_id', $request->event_id)->get()->first();
          // get ID for approvers
          $orgAdviser = OrganizationUser::where('organization_id',$event->organization_id)
          ->where('position', 'Adviser')->first();
@@ -77,6 +78,8 @@ class NRController extends Controller
         ]);
 
         // // Narrative Create
+
+
         $narrative = $form->narrative()->create($nr);
 
 
